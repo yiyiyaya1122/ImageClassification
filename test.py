@@ -3,15 +3,17 @@ from torchvision import datasets, models, transforms
 from torch.utils.data import DataLoader
 from utils.tester import Tester
 from models.resnet import ResNet
+from models.vit import ViT
 import torch
 
 def main(*args, **kwargs):
     pass
 
 if __name__ == "__main__":
-    model = ResNet(weights=None)
+    # model = ResNet(weights=None)
+    model = ViT()
     # print(model.fc.out_features)
-    ckpt_path = './ckpts/epoch5.pth'
+    ckpt_path = './ckpts/vit_vegetable-2.pth'
     model.load_state_dict(torch.load(ckpt_path))
 
     transform = transforms.Compose([
@@ -26,7 +28,7 @@ if __name__ == "__main__":
     tester = Tester(model, test_loader, device)
     test_acc, precision, recall, f1 = tester.test()
 
-    print(f"Test Accuracy: {test_acc:.2f}%")
+    print(f"Test Accuracy: {test_acc:.2f}")
     print(f"Precision: {precision:.2f}")
     print(f"Recall: {recall:.2f}")
     print(f"F1 Score: {f1:.2f}")

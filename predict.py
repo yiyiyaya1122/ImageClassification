@@ -22,7 +22,7 @@ def predict():
 
         else:
             class_name = classifier.detect_image(img)
-            # print(class_name)
+            print(class_name)
 
             
 if __name__ == "__main__":

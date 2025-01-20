@@ -7,6 +7,9 @@ from torchvision import datasets, models, transforms
 from utils.trainer import Trainer
 from models.vit import ViT
 from models.resnet import ResNet
+from torchvision import models
+
+
 
 def main(*args, **kwargs):
     # 定义数据预处理
@@ -25,18 +28,20 @@ def main(*args, **kwargs):
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    # 加载预训练的 ResNet 模型
-    # model = ViT()
-    model = ResNet()
-
-    model = model.to(device)
+    # 加载模型
+    model = ViT()
+    model.load_state_dict(torch.load("./ckpts/vit_vegetable.pth"))
+    # model = ResNet()
+    # model = models.vit_b_16()  
+    # num_classes = 15
+    # model.heads.head = nn.Linear(model.heads.head.in_features, num_classes)
 
     # 定义损失函数和优化器
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.AdamW(model.parameters(), lr=0.001)
+    optimizer = optim.AdamW(model.parameters(), lr=0.005)
 
     # 创建训练器对象并训练
-    trainer = Trainer(model, train_loader, test_loader, criterion, optimizer, device, epochs=5)
+    trainer = Trainer(model, train_loader, test_loader, criterion, optimizer, device, epochs=50)
     trainer.train()
 
 

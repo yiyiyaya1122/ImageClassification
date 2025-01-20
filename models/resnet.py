@@ -6,7 +6,7 @@ import torchvision
 
 def ResNet(cls_num=15, weights=torchvision.models.ResNet101_Weights.DEFAULT, freeze=True):
 
-    model = resnet101(weights=weights)
+    model = resnet101()
     # 修改最后一层为我们任务的类别数
     num_ftrs = model.fc.in_features
     model.fc = nn.Linear(num_ftrs, cls_num)  

@@ -41,12 +41,12 @@ class Tester:
                 pbar.set_postfix(acc=test_acc)
 
         # 计算最终准确率
-        test_acc = 100 * correct / total
+        test_acc = correct / total
         
         # 计算精度、召回率、F1-score
-        precision = precision_score(all_labels, all_preds, average='macro', zero_division=0)
-        recall = recall_score(all_labels, all_preds, average='macro', zero_division=0)
-        f1 = f1_score(all_labels, all_preds, average='macro', zero_division=0)
+        precision = precision_score(all_labels, all_preds, average='micro', zero_division=0)
+        recall = recall_score(all_labels, all_preds, average='micro', zero_division=0)
+        f1 = f1_score(all_labels, all_preds, average='micro', zero_division=0)
 
         # 记录每个batch的准确率、精确度、召回率、F1-score
         self.acc_history.append(test_acc)

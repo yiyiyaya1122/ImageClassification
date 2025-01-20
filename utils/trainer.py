@@ -3,7 +3,8 @@ import torch.nn as nn
 from tqdm import tqdm
 import mlflow
 import matplotlib.pyplot as plt
-
+from torch.optim.lr_scheduler import CosineAnnealingLR
+from utils.early_stopping import EarlyStopping
 
 class Trainer:
     def __init__(self, model, train_loader, val_loader, criterion, optimizer, device, epochs=10, lr=0.001):
@@ -15,6 +16,8 @@ class Trainer:
         self.val_loader = val_loader
         self.criterion = criterion
         self.optimizer = optimizer
+        self.scheduler = CosineAnnealingLR(self.optimizer, T_max=10, eta_min=1e-6)
+        self.early_stopping = EarlyStopping()
         self.device = device
         self.epochs = epochs
         self.lr = lr
@@ -90,10 +93,12 @@ class Trainer:
             mlflow.log_param("learning_rate", self.lr)
 
             for epoch in range(1, self.epochs + 1):
-                print(f"Epoch {epoch}/{self.epochs}")
+                print(f"Epoch {epoch}/{self.epochs}  Learning Rate: {self.scheduler.get_last_lr()[0]}")
 
                 # 训练阶段
                 train_loss, train_acc = self.train_one_epoch()
+                self.scheduler.step()
+
                 self.history["train_loss"].append(train_loss)
                 self.history["train_acc"].append(train_acc)
                 mlflow.log_metric("train_loss", train_loss, step=epoch)
@@ -106,11 +111,17 @@ class Trainer:
                 mlflow.log_metric("val_loss", val_loss, step=epoch)
                 mlflow.log_metric("val_acc", val_acc, step=epoch)
 
-                if epoch % 1 == 0:
+                if epoch % 5 == 0:
                     self.save_model(f"./ckpts/epoch{epoch}.pth")
 
                 print(f"Train Loss: {train_loss:.4f} | Train Acc: {train_acc:.2f}%")
                 print(f"Val Loss: {val_loss:.4f} | Val Acc: {val_acc:.2f}%")
+
+                # Early stopping 策略
+                self.early_stopping(val_loss, self.model)
+                if self.early_stopping.early_stop:
+                    print("Early stopping")
+                    break
 
             self.plot_metrics()
     
