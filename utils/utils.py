@@ -1,3 +1,4 @@
+import time
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -26,6 +27,37 @@ def custom_test(model: nn.Module, dataset: DataLoader, device: torch.device) -> 
 
     accuracy = correct_predictions / total_samples
     return accuracy
+
+def format_elapsed_time(elapsed_time: float, fmt: str = "hms") -> str:
+    """
+    格式化时间差
+    :param elapsed_time: 消耗时间
+    :param fmt: 格式化方式, "seconds", "minutes", "hours", "hms" 等
+    :return: 格式化后的时间字符串
+    """
+    
+    if fmt == "seconds":
+        return f"{elapsed_time:.2f} seconds"
+    
+    elif fmt == "minutes":
+        minutes = elapsed_time // 60
+        seconds = elapsed_time % 60
+        return f"{int(minutes)} minutes and {seconds:.2f} seconds"
+    
+    elif fmt == "hours":
+        hours = elapsed_time // 3600
+        minutes = (elapsed_time % 3600) // 60
+        seconds = elapsed_time % 60
+        return f"{int(hours)} hours, {int(minutes)} minutes, {seconds:.2f} seconds"
+    
+    elif fmt == "hms":
+        hours = elapsed_time // 3600
+        minutes = (elapsed_time % 3600) // 60
+        seconds = elapsed_time % 60
+        return f"{int(hours)}:{int(minutes):02d}:{seconds:.2f}"
+    
+    else:
+        raise ValueError("Unsupported format type. Choose 'seconds', 'minutes', 'hours', or 'hms'.")
 
 
 class CustomModelCheckpoint:

@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 from models.vit import ViT  # 假设你有 ViT 的 PyTorch 实现
 from utils.utils import *
-from utils.arg_parse import parse_args
+from utils.parse_args import parse_args
 
 
 def trainval(args, logger):

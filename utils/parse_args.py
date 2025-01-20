@@ -9,9 +9,7 @@ def parse_args():
     parser.add_argument("--num-classes", default=15, type=int)
     parser.add_argument("--epochs", default=3, type=int)
     parser.add_argument("--log-interval", default=50, type=int)
-    parser.add_argument(
-        "--resume", default="", type=str, help="测试时指定加载的 checkpoint"
-    )
+    parser.add_argument("--resume", default="./ckpts/vit_vegetable.pth", type=str, help="测试时指定加载的 checkpoint")
     parser.add_argument("--test", action="store_true", help="训练完成后执行测试")
     parser.add_argument("--device", default="cuda", choices=["cpu", "cuda"])
 

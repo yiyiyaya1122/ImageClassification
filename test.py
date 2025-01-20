@@ -6,11 +6,8 @@ from models.resnet import ResNet
 from models.vit import ViT
 import torch
 
-def main(*args, **kwargs):
-    pass
-
-if __name__ == "__main__":
-    # model = ResNet(weights=None)
+def test():
+        # model = ResNet(weights=None)
     model = ViT()
     # print(model.fc.out_features)
     ckpt_path = './ckpts/vit_vegetable-2.pth'
@@ -35,3 +32,6 @@ if __name__ == "__main__":
 
     # 绘制指标曲线
     tester.plot_metrics()
+
+if __name__ == "__main__":
+    test()
